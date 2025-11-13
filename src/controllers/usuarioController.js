@@ -16,6 +16,7 @@ function autenticar(req, res) {
 
                 if (resultadoAutenticar.length == 1) {
                     console.log(resultadoAutenticar);
+                    res.json(resultadoAutenticar[0]); 
                 } else if (resultadoAutenticar.length == 0) {
                     res.status(403).send("Email e/ou senha inválido(s)");
                 } else {
@@ -29,7 +30,6 @@ function autenticar(req, res) {
             });
     }
 }
-
 
 function cadastrar(req, res) {
     var nome = req.body.nomeServer;
@@ -56,6 +56,6 @@ function cadastrar(req, res) {
 }
 
 module.exports = {
-    autenticar,
-    cadastrar
+    cadastrar,
+    autenticar
 };
