@@ -6,11 +6,11 @@ function enviarDiario(req , res) {
         if(resultado.length > 0) {
             res.json(resultado);
         } else {
-            res.status(204).send("nenhuma ação encontrada para este setor!")
+            res.status(204).send("nenhuma ação encontrada para este diario!")
         }
     }).catch(function(erro){
         console.log(erro)
-        console.log("Houve um erro ao buscar as ações do setor. ", erro.sqlMessage);
+        console.log("Houve um erro ao buscar as ações do diario. ", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage)
     });
 

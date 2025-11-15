@@ -1,0 +1,85 @@
+/*:root {
+    --roxoPrincipal: #000000;
+    --roxoSecundario: #000000;
+    --corBranca: #ffffff;
+    --fundoClaro: #f9f9fc;
+    --fundoConteudo: #ffffff;
+    --textoEscuro: #333333;
+    --bordaClara: #eeeeee;
+    --alturaBarraSuperior: 60px;
+}*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+img{
+    display: flex;
+    align-items: flex-start;
+}
+a {
+  text-decoration: none;
+  color: inherit; 
+}
+.selecionado{
+    background-color: #f7f7f700;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    box-sizing: border-box;
+    display: flex;
+    background-color: #1b1b1b;
+    color: #2E2E2E;
+}
+
+/*Conteiner principal do nav-bar*/
+nav {
+    width: 10%;
+    height: 100%;
+    padding: 2% 0;
+    background-color: #5a262c;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+/*Estilização do logo*/
+.logo {
+    width: 90%;
+    margin-bottom: 15%;
+    align-self: center;
+}
+
+.nav-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    width: 7%;
+    margin-top: 5%;
+    padding: 5%;
+    display: flex;
+    align-items: left;
+    gap: 5%;
+    color: #000000;
+}
+
+.nav-item:hover {
+    background-color: #f9d360;
+}
+
+main {
+    width: 90%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
