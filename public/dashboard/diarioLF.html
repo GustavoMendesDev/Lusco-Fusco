@@ -1,36 +1,189 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/dash.css">
-    <title>Panorama</title>
 
-    <!--Navebar-->
-    <nav>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/dash.css">
+  <link rel="icon" href="../assets/icon/sunset (1).png" />
+  <title>Diário..</title>
+
+  <!--Navbar-->
+  <nav>
     <div class="nav-container">
       <img class="logo" src="../assets/icon/sunset (1).png" alt="LF">
 
       <div class="nav-item">
         <img src="../assets/icon/book-removebg-preview.png" alt="Icone de Diário" style="width: 30px; height: auto;">
-        <a>Diário</a>
+        <a></a>
       </div>
 
       <div class="nav-item selecionado">
-        <img src="../assets/icon/panoramico-removebg-preview.png" alt="Icone de Panorama" style="width: 30px; height: auto;">
-        <a href="../dashboard/alldash.html">Panorama</a>
+        <img src="../assets/icon/panoramico-removebg-preview.png" alt="Icone de Panorama"
+          style="width: 30px; height: auto;">
+        <a href="../dashboard/alldash.html"></a>
       </div>
 
       <div class="nav-item selecionado">
         <img src="../assets/icon/usericon.png" alt="Icone de User" style="width: 30px; height: auto;">
-        <a href="../dashboard/userdash.html">Usuários</a>
+        <a href="../dashboard/userdash.html"></a>
       </div>
 
-    <img src="../assets/icon/logout-removebg-preview.png" alt="Icone de log-out" style="width: 30px; height: auto;">
+      <div class="nav-item selecionado">
+        <a href="../index.html">
+          <img src="../assets/icon/logout-removebg-preview.png" alt="Icone out" style="width: 30px; height: auto;">
+        </a>
+      </div>
   </nav>
-    <!--Fim do nav-bar-->
+
+  <div class="page">
+
+    <div class="card diary">
+      <p>Diário Lusco-Fusco</p>
+      <p class="subtitle">${usuario} — registre seu Lusco - Fusco, o som dele e a cor do entardecer</p>
+
+      <div class="mood-row">
+        <span>Como você se sente agora?</span>
+
+      </div>
+
+      <div class="textSent">
+        <input id="Ipttexto" placeholder="Escreva uma linha sobre esse pôr do sol..."></input>
+      </div>
+
+      <div class="buttons">
+        <button class="clear">Limpar diário</button>
+      </div>
+
+      <small class="saved">Salvo: 08/11/2025, 22:34:03</small>
+
+      <div class="upload-block">
+
+
+        <div class="ambient-buttons">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card player">
+
+      <label class="textmsc">
+
+        <div id="player"></div>
+        <input type="text" id="linkMusica" placeholder="Cole o link do Spotify..." style="width: 252px;">
+        <input type="text" id="Musica" placeholder="Qual a Música?" style="width: 252px;">
+        <input type="text" id="Artista" placeholder="Qual o Artista?" style="width: 252px;">
+        <br><br>
+        <button id="play" onclick="tocarSpotify()">Tocar</button>
+
+      </label>
+      <p class="tip">
+        Você pode carregar um link do <strong>Spotify</strong> para criar um fundo sonoro.
+      </p>
+
+
+      <p class="instruction">
+        Dê play, e faça um registro do <br><strong> seu Lusco-Fusco.</strong>
+      </p>
+    </div>
+
+    <div class="card summary">
+
+      <h3>- Imagem -</h3>
+      <br>
+
+      <img id="preview" style="width: 300px; display: none; margin-bottom: 10px;" />
+
+      <input name="foto" id="foto" type="file" />
+      <br><br>
+      <p> Ultimos diários - resumo</p>
+
+      <div class="summary-box"></div>
+
+      <br>
+
+      <p>Histórico breve</p>
+      <div class="history-list">
+        <p>08/11/2025, 22:34:03 —</p>
+        <p>08/11/2025, 22:31:47 —</p>
+
+
+        <div class="buttons">
+          <button onclick="ENVIAR()">Enviar Diário</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!--Fim do nav-bar-->
 </head>
+
 <body>
-    
+  <script>
+
+// pega foto pelo id, usa o const, cria a const preview
+
+    const input = document.getElementById("foto");
+    const preview = document.getElementById("preview");
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    });
+
+    // o player funciona mesmo aqui
+
+    function tocarSpotify() {
+
+      let url = document.getElementById('linkMusica').value.trim();
+      const playerDiv = document.getElementById('player');
+      playerDiv.innerHTML = "";
+
+      if (!url.includes("open.spotify.com/")) {
+        playerDiv.innerHTML = "<p style='color:red'> O link não é valido...</p>";
+        return;
+      }
+      // to fazendo a switch (ACHEI ERRO É O INTL)
+      url = url.replace("intl-pt", "/");
+
+      let cleanUrl = url.split("?")[0];
+
+      let path = cleanUrl.replace("https://open.spotify.com/", "");
+
+      let parts = path.split("/").filter(p => p.length > 0);
+
+      let validTypes = ["track", "album", "playlist", "artist", "episode", "show"];
+      let type = parts.find(p => validTypes.includes(p));
+
+      if (!type) {
+        playerDiv.innerHTML = "<p style='color:red'>Tipo de mídia Spotify inválido.</p>";
+        return;
+      }
+
+      let idIndex = parts.indexOf(type) + 1;
+      let id = parts[idIndex];
+
+      if (!id) {
+        playerDiv.innerHTML = "<p style='color:red'>ID da música/playlist inválido.</p>";
+        return;
+      }
+
+      const embed = `https://open.spotify.com/embed/${type}/${id}`;
+
+      playerDiv.innerHTML = `
+        <iframe style="border-radius:12px"
+            src="${embed}"
+            width="100%" height="202"
+            frameborder="0">
+        </iframe>
+    `; // usei alguns aterfatos para caso o 
+    }
+  </script>
 </body>
+
 </html>

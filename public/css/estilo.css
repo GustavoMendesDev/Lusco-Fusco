@@ -2,10 +2,11 @@
 
 :root {
   --tamanho-header: 130px;
-  --tamanho-banner: calc(130vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
-  --tamanho-login: calc(130vh - var(--tamanho-header));
-  --tamanho-cadastro: calc(130vh - var(--tamanho-header));
   --tamanho-footer: 70px;
+
+  --tamanho-banner: calc(130vh - var(--tamanho-header) - var(--tamanho-footer));
+  --tamanho-login: calc(120vh - var(--tamanho-header));
+  --tamanho-cadastro: calc(120vh - var(--tamanho-header));
 }
 
 * {
@@ -15,7 +16,6 @@
 
 
 body {
-  height: var(--tamanho-banner);
   background-size: 2000px;
   margin: 0;
   padding: 0;
@@ -116,7 +116,7 @@ a:hover span {
  align-items: left;
 }
 .navbar {
-  width: 350px;
+  width: 32%;
   display: flex;
   align-items: left;
   justify-content: space-between;
@@ -305,10 +305,15 @@ a:hover span {
 }
 
 .card h2 {
+  color: #5a262c;
   margin: 0;
   font-size: 30px;
   text-align: center;
   margin-bottom: 20px;
+}
+
+.card a {
+  color: #5a262c;
 }
 
 .formulario {

@@ -4,7 +4,7 @@
 
 /*
 comandos para mysql - banco local
-*/
+
 
 create database exemplo_upload;
 use exemplo_upload;
