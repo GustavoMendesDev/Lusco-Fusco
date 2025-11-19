@@ -3,7 +3,6 @@
 :root {
   --tamanho-header: 130px;
   --tamanho-footer: 70px;
-
   --tamanho-banner: calc(130vh - var(--tamanho-header) - var(--tamanho-footer));
   --tamanho-login: calc(120vh - var(--tamanho-header));
   --tamanho-cadastro: calc(120vh - var(--tamanho-header));
@@ -120,8 +119,8 @@ a:hover span {
   display: flex;
   align-items: left;
   justify-content: space-between;
-  gap: 5px;
-  margin-left: 5px;
+  gap: 3px;
+  margin-left: 3px;
   font-family: "Elms Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 200;

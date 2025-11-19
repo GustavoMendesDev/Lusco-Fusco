@@ -3,8 +3,12 @@ var rota = express.Router();
 
 var diarioController = require ('../controllers/diarioController');
 
-rota.get('/controllers/diarioController', function(req , res){
+rota.post('/enviarDiario/', function(req , res){
     diarioController.enviarDiario(req , res);
 });
+
+rota.post('/diarioController/:imagem', function(req , res){
+    diarioController.enviarDiario(req , res);
+})
 
 module.exports = rota;

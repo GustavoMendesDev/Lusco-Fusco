@@ -14,24 +14,27 @@
     <div class="nav-container">
       <img class="logo" src="../assets/icon/sunset (1).png" alt="LF" style="width: 50px; height: auto;">
 
-      <div class="nav-item">
-        <img src="../assets/icon/book-removebg-preview.png" alt="Icone de Panorama" style="width: 30px; height: auto;">
-        <p></p>
-        <a href="../dashboard/diarioLF.html">Diário</a>
-      </div>
 
-      <div class="nav-item selecionado">
-        <img src="../assets/icon/panoramico-removebg-preview.png" alt="Icone de Panorama"
-          style="width: 30px; height: auto;">
-        <a href="../dashboard/alldash.html">Estátiticas</a>
-      </div>
+      <a href="../dashboard/diarioLF.html">
+        <img src="../assets/icon/book-removebg-preview.png">
+      </a>
 
-      <div class="nav-item selecionado">
-        <img src="../assets/icon/usericon.png" alt="Icone de User" style="width: 30px; height: auto;">
-        <a>Usuário</a>
-      </div>
 
-      <img src="../assets/icon/logout-removebg-preview.png" alt="Icone de log-out" style="width: 30px; height: auto;">
+      <a href="../dashboard/alldash.html">
+        <img src="../assets/icon/panoramico-removebg-preview.png">
+      </a>
+
+
+
+      <a href="../dashboard/userdash.html">
+        <img src="../assets/icon/usericon.png">
+      </a>
+
+
+      <a href="../index.html">
+        <img src="../assets/icon/logout-removebg-preview.png">
+      </a>
+    </div>
   </nav>
   <!--Fim do nav-bar-->
 </head>
@@ -40,66 +43,36 @@
 
 <div class="page">
 
-  <div class="card diary">
-    <p> Usuário Lusco-Fusco </p>
+  <div class="cardD">
+    <p class="titulo">Usuário Lusco-Fusco</p>
+    <p class="subtitle">Olá ${usuario} — Acompanhe seus Lusco-Fuscos</p>
+    
+    sua media de caracteres por Lusco-Fusco é...
+    <br><br>
+    ${AVG(desc)}
+     <br><br>
+     O horario que você mais usa o LF é..
+      <br><br>
+      ${AVG(dtLF)}
+  </div>
+  <div class="cardP">
+    Artista mais tocado
+    <br><br>
+    ${Artista}
+    <br><br>
 
-    <div class="mood-row">
-      <div class="emojis">
-      </div>
-    </div>
-
-    <div class="color-row">
-    </div>
-
-    <div class="textinho">
-    </div>
-
-    <div class="buttons">
-    </div>
-
-
-    <div class="upload-block">
-      <input type="file" hidden>
-      </label>
-
-      <div class="ambient-buttons">
-      </div>
-
-      <p class="tip">
-      </p>
-    </div>
+    Musica mais tocada
+    <br><br>
+    ${musica}
+    <br><br>
+    {player}
   </div>
 
-  <div class="card player">
+  <div class="cardF">
 
-    <div class="audio-controls">
-
-
-      <div class="time">
-      </div>
-
-      <div class="volume">
-      </div>
-    </div>
-
-    <p class="playlist-info">
-
-    </p>
-
-    <p class="instruction">
-    </p>
-  </div>
-
-  <div class="card summary">
-
-
-    <div class="listen-time"></div>
-
-    <div class="history-list">
-
-      <div class="enviar">
-      </div>
-    </div>
+    <p class="titulo">Seus Diarios..</p>
+    <br>
+    /controllers/diarioController/diarios
   </div>
 
 </div>

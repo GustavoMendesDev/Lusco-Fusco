@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="icon" href="./assets/icon/pngegg__1_-removebg-preview.png">
+    <link rel="icon" href="../public/assets/icon/sunset (1).png" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
@@ -32,13 +32,13 @@
         </div>
         <ul class="navbar">
             <li>
-                <a href="index.html">Quem somos</a>
+                <a href="index.html">Home</a>
+            </li>
+            <a href="cadastro.html">Cadastro</a>
             </li>
             <li class="agora">
                 <a href="#">Login</a>
             <li>
-                <a href="cadastro.html">Cadastro</a>
-            </li>
         </ul>
     </div>
     </div>
@@ -71,7 +71,7 @@
                     <img src="./assets/solzinho.gif" id="loading-gif">
                 </div>
 
-                <div id="div_erros_login"></div>
+                <div id="mensagem_erro"></div>
             </div>
         </div>
     </div>
@@ -82,14 +82,22 @@
 
 <script>
     function entrar() {
+        var vtemail = ["@"]
+        var vtsenha = ["@", "#", "$", "%"]
         var emailVar = input_email.value;
         var senhaVar = input_senha.value;
 
         if (emailVar == "" || senhaVar == "") {
             console.log('Mensagem de erro para todos os campos em branco');
-            cardErro.style.display = "block";
             mensagem_erro.innerHTML = "Preencha todos os campos!";
             return false;
+        } if (!vtemail.includes(emailVar)) {
+            console.log('Mensagem de erro ');
+            mensagem_erro.innerHTML = "Coloque um email valido!";
+
+        } if (!vtsenha.includes(senhaVar)) {
+            console.log('Mensagem de erro ');
+            mensagem_erro.innerHTML = "Coloque um caractere especial!";
         }
 
         console.log("FORM LOGIN: ", emailVar);
@@ -114,16 +122,17 @@
                     console.log(JSON.stringify(json));
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;
-                    sessionStorage.ID_USUARIO = json.id;
+                    sessionStorage.ID_USUARIO = json.idUser;
+
                     console.log("EMAIL: " + sessionStorage.EMAIL_USUARIO);
                     console.log("Nome: " + sessionStorage.NOME_USUARIO);
                     console.log("ID: " + sessionStorage.ID_USUARIO);
                     console.log("Login realizado com sucesso!");
+
                     window.location = "dashboard/diarioLF.html";
                 });
             } else {
                 console.log("Houve um erro ao tentar realizar o login!");
-                cardErro.style.display = "block";
                 resposta.text().then(texto => {
                     console.error(texto);
                     mensagem_erro.innerHTML = texto;
@@ -131,7 +140,6 @@
             }
         }).catch(function (erro) {
             console.log(erro);
-            cardErro.style.display = "block";
             mensagem_erro.innerHTML = "Erro na conexão com o servidor";
         })
 
