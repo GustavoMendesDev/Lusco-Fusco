@@ -11,21 +11,6 @@ USE LuscoFusco;
 
 DROP DATABASE luscoFusco;
 
-CREATE TABLE usuario (
-idUser INT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(59),
-email VARCHAR(59),
-senha VARCHAR(59),
-fkdiario INT 
-);
-
-CREATE TABLE diario (
-idDiario INT PRIMARY KEY AUTO_INCREMENT,
-relato VARCHAR(999),
-dataD DATETIME DEFAULT CURRENT_TIMESTAMP(),
-fkmusica INT
-);
-
 CREATE TABLE musica (
 idMusic INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR (59),
@@ -33,12 +18,24 @@ link VARCHAR(255),
 artista VARCHAR (59)
 );
 
-ALTER TABLE usuario ADD
-CONSTRAINT CnxDiario
-FOREIGN KEY (fkdiario)
-REFERENCES diario(idDiario);
+CREATE TABLE diario (
+idDiario INT PRIMARY KEY AUTO_INCREMENT,
+relato VARCHAR(999),
+dataD DATETIME DEFAULT CURRENT_TIMESTAMP(),
+imagem VARCHAR(255),
+fkmusica INT,
+constraint fkmusica
+ foreign key (fkmusica) 
+  references musica(idMusic)
+);
 
-ALTER TABLE diario ADD
-CONSTRAINT CnxMusica
-FOREIGN KEY (fkmusica)
-REFERENCES musica(idMusic);
+CREATE TABLE usuario (
+idUser INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(59),
+email VARCHAR(59),
+senha VARCHAR(59),
+fkdiario INT,
+constraint fkdiary
+ foreign key (fkdiario)
+  references diario(idDiario)
+);

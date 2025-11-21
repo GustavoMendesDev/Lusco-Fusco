@@ -1,22 +1,31 @@
- var database = require("../database/config")
+var database = require("../database/config")
 
- function enviarDiario(relato, link, nome, artista, idUser) {
-        console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function enviarDiario():", relato, link, nome, artista);
+function enviarDiario(relato, imagem, link, nome, artista, idUser) {
+  console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function enviarDiario():", relato, imagem, link, nome, artista, idUser);
 
-    var instrucaoSql = `INSERT INTO musica (link, nome, artista) VALUES ('${link}','${nome}','${artista}');`; 
+  var valorImagem = imagem ? `${imagem}` : 'NULL';
 
-     return database.executar(instrucaoSql).then(function (resultadoMusica) {
+  var instrucaoSql = `INSERT INTO diario (relato, imagem, fkuser) VALUES ('${relato}','${valorImagem}', ${idUser});`;
 
-        var idMusic = resultadoMusica.insertId;
+  return database.executar(instrucaoSql)
+    .then((resultadoDiario) => {
 
-    var instrucaoSql2 = `INSERT INTO diario (relato, fkuser, fkmusica) VALUES ('${relato}', ${idUser}, ${idMusic});`;
+      var idDiario = resultadoDiario.insertId;
 
-    console.log("Executando a instrução SQL: \n" + instrucaoSql + instrucaoSql2);
+      var instrucaoSql2 = `INSERT INTO musica (link, nome, artista, fkdiario) VALUES ('${link}','${nome}','${artista}',${idDiario});`;
 
-        return database.executar(instrucaoSql2);
-     });
- }
+      console.log("Executando a instrução SQL: \n" + instrucaoSql + instrucaoSql2);
 
- module.exports = {
-    enviarDiario
- }
+      return database.executar(instrucaoSql2);
+    });
+}
+
+function buscarUsuarioPeloDiario(idDiario, idUser) {
+  var instrucaoSql = `select imagem from diario where fkUser = ${idUser} and idDiario = ${idDiario};`
+
+  return database.executar(instrucaoSql);
+}
+module.exports = {
+  enviarDiario,
+  buscarUsuarioPeloDiario
+}

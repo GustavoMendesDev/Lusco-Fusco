@@ -1,29 +1,37 @@
-const usuarioModel = require('../models/usuarioModel');
+var diarioModel = require('../models/diarioModel');
 
+function enviarDiario(req, res) {
 
-function salvar(req, res) {
-  const imagem = req.file.filename;
+    var foto = req.file ? req.file.filename : null;
 
-  const {nome, email} = req.body
+    var diario = {
+        relato: relatoServer,
+        link: LinkServer,
+        nomeMusica: NomeMusicaServer,
+        artista: ArtistaServer,
+        idUser: idUserServer,
+        foto: foto
+    };
 
-  const usuario = { nome, email, imagem }
-  
-  usuarioModel.salvar(usuario)
-  .then(resultado => {
-    res.status(201).send("Usuario criado com sucesso");
-  }).catch(err => {
-    res.status(500).send(err);
-  });
+    diarioModel.enviarDiario(diario)
+        .then(function(resultado) {
+            res.status(201).send("Diário criado com sucesso");
+        })
+        .catch(function(err) {
+            console.log(err);
+            res.status(500).send(err);
+        });
 }
 
-function buscarUsuarioPeloId(req, res) {
-  console.log(req.params.id);
-  usuarioModel.buscarUsuarioPeloId(req.params.id)
-  .then(resultado => {
-    res.json(resultado);
-  }).catch(err => {
-    res.status(500).send(err);
-  });
+function buscarUsuarioPeloDiario(req, res) {
+    console.log(req.params.id);
+    diarioModel.buscarUsuarioPeloDiario(req.params.id)
+        .then(function(resultado) {
+            res.json(resultado);
+        })
+        .catch(function(err) {
+            res.status(500).send(err);
+        });
 }
 
-module.exports = { salvar, buscarUsuarioPeloId }
+module.exports = { enviarDiario, buscarUsuarioPeloDiario }

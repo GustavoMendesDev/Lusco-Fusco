@@ -186,7 +186,16 @@ display: flex;
 
 .textSent input::placeholder,
 .textmsc input::placeholder {
-    color: rgba(255, 255, 255, 0.6); /* Amarelo transparente */
+    color: rgba(255, 255, 255, 0.6);
+}
+#foto{
+    background: rgba(255, 255, 255, 0.13);
+     color: white;
+     padding: 10px 16px;
+     border-radius: 8px;
+     cursor: pointer;
+     text-align: center;
+
 }
  .btn-upload {
      background: rgba(255, 255, 255, 0.13);

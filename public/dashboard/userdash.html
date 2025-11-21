@@ -47,9 +47,6 @@
     <p class="titulo">Usuário Lusco-Fusco</p>
     <p class="subtitle">Olá ${usuario} — Acompanhe seus Lusco-Fuscos</p>
     
-    sua media de caracteres por Lusco-Fusco é...
-    <br><br>
-    ${AVG(desc)}
      <br><br>
      O horario que você mais usa o LF é..
       <br><br>
@@ -58,12 +55,12 @@
   <div class="cardP">
     Artista mais tocado
     <br><br>
-    ${Artista}
+    count ${artista} from Id = ${idUser}
     <br><br>
 
     Musica mais tocada
     <br><br>
-    ${musica}
+    count ${musica} from Id = ${idUser}
     <br><br>
     {player}
   </div>

@@ -15,6 +15,7 @@ var HOST_APP = process.env.APP_HOST;
 
 var app = express();
 
+
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var diarioRouter = require("./src/routes/diario");
@@ -27,7 +28,8 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
-app.use("/diario", diarioRouter)
+app.use("/diario", diarioRouter);
+
 
 app.listen(PORTA_APP, function () {
     console.log(`
