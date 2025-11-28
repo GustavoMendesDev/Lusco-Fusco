@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
   <link rel="stylesheet" href="./css/estilo.css" />
-  <link rel="icon" href="../assets/icon/sunset (1).png" />
+  <link rel="icon" href="../public/assets/icon/sunrise.png" />
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
@@ -22,7 +22,7 @@
     <div class="logo-container">
       <div class="photo">
         <a href="index.html">
-          <img src="./assets/icon/sunset (1).png">
+          <img src="./assets/icon/sunrise.png">
         </a>
       </div>
       <h1 class="titulo"> Lusco-Fusco </h1>
@@ -47,7 +47,6 @@
   <div class="login">
     <div class="alerta_erro">
       <div class="card_erro" id="cardErro">
-        <span id="mensagem_erro"></span>
       </div>
     </div>
     <div class="container">
@@ -74,6 +73,7 @@
             <a>Confirmação da Senha:</a>
             <input id="confirmacao_senha_input" type="password" placeholder="******" />
           </div>
+          <span id="mensagem_erro"></span>
           <button class="botao" onclick="cadastrar()">Cadastrar</button>
         </div>
         <div id="div_aguardar" class="loading-div">
@@ -86,99 +86,94 @@
   </div>
 </body>
 
-</html>
-
 <script>
-
-  // Array para armazenar empresas cadastradas para validação de código de ativação 
-
-
-  function cadastrar() {
-    // aguardar();
-
-    //Recupere o valor da nova input pelo nome do id
-    // Agora vá para o método fetch logo abaixo
-    var nomeVar = nome_input.value;
+  function validar() {
+    var vtemail = ["@"]
+    var vtsenha = ["@", "#", "$", "%"]
+    var nomeUser = nome_input.value;
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
 
-    // Verificando se há algum campo em branco
     if (
-      nomeVar == "" ||
+      nomeUser == "" ||
       emailVar == "" ||
       senhaVar == "" ||
       confirmacaoSenhaVar == ""
     ) {
-      cardErro.style.display = "block";
       mensagem_erro.innerHTML =
         "(Mensagem de erro para todos os campos em branco)";
-        var vtemail = ["@"]
-        var vtsenha = ["@", "#", "$", "%"]
-        var emailVar = input_email.value;
-        var senhaVar = input_senha.value;
-
-        if (emailVar == "" || senhaVar == "") {
-            console.log('Mensagem de erro para todos os campos em branco');
-            cardErro.style.display = "block";
-            mensagem_erro.innerHTML = "Preencha todos os campos!";
-            return false;
-        } if (!vtemail.includes(emailVar)) {
-            console.log('Mensagem de erro ');
-            cardErro.style.display = "block";
-            mensagem_erro.innerHTML = "Coloque um email valido!";
-        } if (!vtsenha.includes(senhaVar)) {
-            console.log('Mensagem de erro ');
-            cardErro.style.display = "block";
-            mensagem_erro.innerHTML = "Coloque um caractere especial!";
-        }
-
-      finalizarAguardar();
-      return false;
-    } else {
-      setInterval(5000);
     }
-    // Enviando o valor da nova input
-    fetch("/usuarios/cadastrar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        // crie um atributo que recebe o valor recuperado aqui
-        // Agora vá para o arquivo routes/usuario.js
-        nomeServer: nomeVar,
-        emailServer: emailVar,
-        senhaServer: senhaVar,
-      }),
-    })
-      .then(function (resposta) {
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-          cardErro.style.display = "block";
-
-          mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
-
-          setTimeout(() => {
-            window.location = "login.html";
-          }, "2000");
-
-          limparFormulario();
-          finalizarAguardar();
-        } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
-        }
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-        finalizarAguardar();
-      });
-
-    return false;
+    if (emailVar == "" || senhaVar == "") {
+      console.log('Mensagem de erro para todos os campos em branco');
+      mensagem_erro.innerHTML = "Preencha todos os campos!";
+      return false;
+    } if (!vtemail.includes(emailVar)) {
+      console.log('Mensagem de erro ');
+      mensagem_erro.innerHTML = "Coloque um email valido!";
+        return false;
+    } if (!vtsenha.includes(senhaVar)) {
+      console.log('Mensagem de erro ');
+      mensagem_erro.innerHTML = "Coloque um caractere especial!";
+        return false;
+    }
   }
 
-  // Listando empresas cadastradas 
+
+    function cadastrar() {
+
+      validar()
+
+      //Recupere o valor da nova input pelo nome do id
+      var nomeUser = nome_input.value;
+      var emailVar = email_input.value;
+      var senhaVar = senha_input.value;
+      var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+      // Enviando o valor da nova input
+      fetch("/usuarios/cadastrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // crie um atributo que recebe o valor recuperado aqui
+          // Agora vá para o arquivo routes/usuario.js
+          nomeServer: nomeUser,
+          emailServer: emailVar,
+          senhaServer: senhaVar,
+
+
+
+        }),
+      })
+        .then(function (resposta) {
+          console.log("resposta: ", resposta);
+
+          if (resposta.ok) {
+
+            var nomeUser = sessionStorage.NOME_USUARIO
+
+            mensagem_erro.innerHTML =
+              "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+            setTimeout(() => {
+              window.location = "login.html";
+            }, "1500");
+
+            limparFormulario();
+            finalizarAguardar();
+          } else {
+            throw "Houve um erro ao tentar realizar o cadastro!";
+          }
+        })
+        .catch(function (resposta) {
+          console.log(`#ERRO: ${resposta}`);
+          finalizarAguardar();
+        });
+
+      return false;
+    }
 </script>
+</html>

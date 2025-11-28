@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="icon" href="../public/assets/icon/sunset (1).png" />
+    <link rel="icon" href="../public/assets/icon/sunrise.png" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
@@ -25,7 +25,7 @@
         <div class="logo-container">
             <div class="photo">
                 <a href="index.html">
-                    <img src="./assets/icon/sunset (1).png">
+                    <img src="./assets/icon/sunrise.png">
                 </a>
             </div>
             <h1 class="titulo"> Lusco-Fusco </h1>
@@ -65,40 +65,45 @@
                         <input id="input_senha" type="password" placeholder="******">
                     </div>
                     <button class="botao" onclick="entrar()">Entrar</button>
+                    <div id="mensagem_erro"></div>
                 </div>
 
                 <div id="div_aguardar" class="loading-div">
                     <img src="./assets/solzinho.gif" id="loading-gif">
                 </div>
-
-                <div id="mensagem_erro"></div>
             </div>
         </div>
     </div>
     </div>
 
-
-</body>
-
 <script>
-    function entrar() {
+    function validar(){
         var vtemail = ["@"]
         var vtsenha = ["@", "#", "$", "%"]
+
         var emailVar = input_email.value;
         var senhaVar = input_senha.value;
+        
 
         if (emailVar == "" || senhaVar == "") {
             console.log('Mensagem de erro para todos os campos em branco');
-            mensagem_erro.innerHTML = "Preencha todos os campos!";
+            mensagem_erro.innerHTML += "Preencha todos os campos!";
             return false;
         } if (!vtemail.includes(emailVar)) {
             console.log('Mensagem de erro ');
-            mensagem_erro.innerHTML = "Coloque um email valido!";
+            mensagem_erro.innerHTML += "Coloque um email valido!";
 
         } if (!vtsenha.includes(senhaVar)) {
             console.log('Mensagem de erro ');
-            mensagem_erro.innerHTML = "Coloque um caractere especial!";
+            mensagem_erro.innerHTML += "Coloque um caractere especial!";
         }
+    }
+
+    function entrar() {
+
+        validar()
+        var emailVar = input_email.value;
+        var senhaVar = input_senha.value;
 
         console.log("FORM LOGIN: ", emailVar);
         console.log("FORM SENHA: ", senhaVar);
@@ -146,5 +151,6 @@
         return false;
     }
 </script>
+</body>
 
 </html>

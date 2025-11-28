@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/dash.css">
-  <link rel="icon" href="../assets/icon/sunset (1).png" />
+  <link rel="icon" href="../assets/icon/sunrise.png" />
   <title>Estátiticas..</title>
 
   <!--Navebar-->
   <nav>
     <div class="nav-container">
-      <img class="logo" src="../assets/icon/sunset (1).png" alt="LF" style="width: 50px; height: auto;">
+      <img class="logo" src="../assets/icon/sunrise.png" alt="LF" style="width: 50px; height: auto;">
 
 
       <a href="../dashboard/diarioLF.html">
@@ -20,7 +20,7 @@
 
 
       <a href="../dashboard/alldash.html">
-        <img src="../assets/icon/panoramico-removebg-preview.png">
+        <img src="../assets/icon/tocador-de-musica-removebg-preview.png">
       </a>
 
 
@@ -33,50 +33,146 @@
       <a href="../index.html">
         <img src="../assets/icon/logout-removebg-preview.png">
       </a>
-      </div>
+    </div>
   </nav>
 
-  
+
   <!--Fim do nav-bar-->
 
 
 </head>
 
-<div class="page">
 
-      <div class="cardD">
+<body onload="Musicatotal(); Artistatotal();">
 
-      <p class="titulo">Estátiticas Lusco-Fusco</p>
-      <p class="subtitle">Olá ${usuario} — Acompanhe as Estátiticas de todos os Lusco-Fuscos</p>
-      GRAFICO horario usuarios
-       <br><br>
-</div>
-<div class="cardP">
-Musicas mais tocadas de todos os Lusco-Fuscos
-
-   ${count(Musica)}
-   <br><br>
-</div>
-
-<div class="cardF">
-
-  Artistas mais tocados de todos Lusco-Fuscos
-
-  ${count(Artista)}
-  <br><br>
-
-</div>
+  <div class="page">
+    <div class="cardD">
+      <h2 >Estátiticas Lusco-Fusco</h2>
+      <br>
+      <p>Olá ${usuario}</p>
 
 
+        <br><br>
+    </div>
+    <div class="cardP">
+      <div id="MusicaTotal"></div>
+    </div>
 
-<!--Fim do nav-bar-->
-</head>
+    <div class="cardF">
+      <div id="ArtistaTotal"></div>
+    </div>
 
-<body>
-  <script>
-
-
-  </script>
 </body>
+<script>
+
+  function Musicatotal() {
+
+    fetch(`/dash/Musicatotal/`)
+      .then(res => res.json())
+      .then(musicas => {
+        if (!musicas || musicas.length == 0) {
+          MusicaTotal.innerHTML = "<p>Nenhuma música encontrada.</p>";
+          return;
+        }
+
+        MusicaTotal.innerHTML = "<h2>Música mais tocadas <br> De todo Lusco-Fusco</h2><br>";
+
+        for (var i = 0; i < musicas.length; i++) {
+          var m = musicas[i];
+          MusicaTotal.innerHTML +=
+            "<p>Música: " + m.Musica +
+            " | Vezes: " + m.Quantidade + "</p> <br>";
+        }
+      })
+      .catch(err => {
+        console.error("Erro ao buscar músicas:", err);
+        MusicaTotal.innerHTML = "<p>Erro ao carregar músicas.</p>";
+      });
+  }
+
+  function Artistatotal() {
+
+    fetch(`/dash/Artistatotal/`)
+      .then(res => res.json())
+      .then(artistas => {
+        if (!artistas || artistas.length == 0) {
+          ArtistaTotal.innerHTML = "<p>Nenhum artista encontrado.</p>";
+          return;
+        }
+
+        ArtistaTotal.innerHTML = "<h2>Artistas mais tocados <br> De todo Lusco-Fusco</h2><br>";
+
+        for (var i = 0; i < artistas.length; i++) {
+          var a = artistas[i];
+          ArtistaTotal.innerHTML +=
+            "<p>Artista: " + a.Artista +
+            " | Vezes: " + a.Quantidade + "</p> <br>";
+        }
+      })
+      .catch(err => {
+        console.error("Erro ao buscar artistas:", err);
+        ArtistaTotal.innerHTML = "<p>Erro ao carregar artistas.</p>";
+      });
+  }
+
+ function obterDadosLusco() {
+
+    fetch("/lusco/contagem", { cache: 'no-store' }).then(function (response) {
+
+        if (response.ok) {
+            response.json().then(function (resposta) {
+
+                let dadosConvertidos = [
+                    { momento_grafico: "Com música", valor: resposta.comMusica },
+                    { momento_grafico: "Sem música", valor: resposta.semMusica }
+                ];
+
+                plotarGraficoLusco(dadosConvertidos);
+            });
+
+        } else {
+            console.error("Erro ao buscar dados do Lusco Fusco");
+        }
+
+    }).catch(function (error) {
+        console.error("Erro geral:", error);
+    });
+}
+   function plotarGraficoLusco(resposta) {
+    console.log("Plotando gráfico de pizza do Lusco Fusco...");
+
+    let labels = [];
+    let valores = [];
+
+    for (let i = 0; i < resposta.length; i++) {
+        labels.push(resposta[i].momento_grafico);
+        valores.push(resposta[i].valor);
+    }
+
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Uso de Música',
+            data: valores,
+            backgroundColor: [
+                'rgb(75, 192, 192)', 
+                'rgb(199, 52, 52)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: data
+    };
+
+    new Chart(
+        document.getElementById("chartLusco"),
+        config
+    );
+  }
+
+</script>
 
 </html>

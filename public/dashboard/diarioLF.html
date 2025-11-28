@@ -5,23 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/dash.css">
-  <link rel="icon" href="../assets/icon/sunset (1).png" />
+  <link rel="icon" href="../assets/icon/sunrise.png" />
   <title>Diário..</title>
+</head>
+<!--Navbar-->
 
-  <!--Navbar-->
-
+<body>
   <nav>
     <div class="nav-container">
-      <img class="logo" src="../assets/icon/sunset (1).png" alt="LF" style="width: 50px; height: auto;">
+      <img class="logo" src="../assets/icon/sunrise.png" alt="LF" style="width: 50px; height: auto;">
 
 
-      <a href="../dashboard/diarioLF.html">
+      <a class="checado" href="../dashboard/diarioLF.html">
         <img src="../assets/icon/book-removebg-preview.png">
       </a>
 
 
       <a href="../dashboard/alldash.html">
-        <img src="../assets/icon/panoramico-removebg-preview.png">
+        <img src="../assets/icon/tocador-de-musica-removebg-preview.png">
       </a>
 
 
@@ -41,7 +42,7 @@
   <div class="page">
 
     <div class="cardD">
-      <p class="titulo">Diário Lusco-Fusco</p>
+      <p class="titulo">Faça sua postagem <br> no Lusco-Fusco !</p>
       <p class="subtitle">${usuario} — registre seu Lusco - Fusco, o som dele e a cor do entardecer</p>
 
       <div class="mood-row">
@@ -88,27 +89,27 @@
     </div>
 
     <div class="cardF">
-      <label class="buttonPhoto">
-        <div id="container"></div>
 
-        <input name="foto" id="foto" type="file" />
+      <div class="ImagemU"  id="container">
 
-        <button id="btn-mostrar" onclick="MostrarFoto()"> Mostrar Imagem</button>
+      </div>
 
-        <div id="foto_erro"></div>
+      <div class="botoesFoto">
+        <label class="btn-foto" for="foto">Enviar imagem</label>
+        <input style="display: none;" name="foto" id="foto" type="file"/>
 
-      </label>
+        <button class="btn-foto" id="btn-mostrar" onclick="MostrarFoto()">Mostrar Imagem</button>
+      </div>
 
+      <div id="foto_erro"></div>
+      <div id="mensagem_erro"></div>
     </div>
-    <div id="mensagem_erro"></div>
+
     <button id="btn-enviar" onclick="enviarDiario(relato, foto, link, Musica, Artista)">Enviar Diário</button>
 
   </div>
   </div>
-  <!--Fim do nav-bar-->
-</head>
 
-<body>
 </body>
 <script>
 
@@ -120,8 +121,7 @@
     var nomeMusica = Musica.value;
     var artistaMusica = Artista.value;
     var idUser = sessionStorage.ID_USUARIO;
-    var idDiario = sessionStorage.ID_DIARIO;
-
+    var nomeUser = sessionStorage.NOME_USUARIO;
     console.log(relatoDiario, linkMusica, nomeMusica, artistaMusica);
 
     if (
@@ -129,17 +129,15 @@
       linkMusica == "" ||
       nomeMusica == "" ||
       artistaMusica == ""
-    ) { mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)"; }
+    ) { mensagem_erro.innerHTML = "()"; }
 
     var formData = new FormData();
     formData.append("relatoServer", relatoDiario);
     formData.append("LinkServer", linkMusica);
     formData.append("NomeMusicaServer", nomeMusica);
     formData.append("ArtistaServer", artistaMusica);
-    formData.append("idDiarioServer", idDiario);
     formData.append("idUserServer", idUser);
-    var idUser = sessionStorage.ID_USUARIO;
-    var idDiario = sessionStorage.ID_DIARIO;
+
 
     if (foto.files.length > 0) {
       formData.append("foto", foto.files[0]);
@@ -152,12 +150,25 @@
     })
       .then(function (resposta) {
         console.log("resposta: ", resposta);
+        return resposta.json();
+      })
 
-        if (resposta.ok) {
+      .then(function (dados) {
+        console.log("DADOS RECEBIDOS DO BACK:", dados);
 
-          mensagem_erro.innerHTML =
-            "`<strong><p style='color:green'>Diário enviado!</p></strong>;`";
+        if (dados.insertId) {
+          sessionStorage.ID_DIARIO = dados.insertId;
+          console.log("ID salvo:", sessionStorage.ID_DIARIO);
         }
+
+        mensagem_erro.innerHTML =
+          "<strong><p style='color:green'>Diário enviado!</p></strong>";
+      })
+
+      .catch(function (erro) {
+        console.error("Erro ao enviar:", erro);
+        mensagem_erro.innerHTML =
+          "<strong><p style='color:red'>Erro ao enviar o diário.</p></strong>";
       });
   }
 
@@ -168,21 +179,32 @@
 
   function MostrarFoto() {
 
-    fetch(`/buscarUsuarioPeloDiario/${idDiario}`, {
+    var idDiario = sessionStorage.ID_DIARIO
+
+    console.log("ID_DIARIO no MostrarFoto:", idDiario);
+
+    if (!idDiario) {
+      console.error(" ID_DIARIO está vazio! Diário não foi salvo.");
+      return;
+    }
+
+    fetch(`/diario/buscarImagemPeloDiario/${idDiario}`, {
       method: "GET"
     })
-      .then(res => {
-        res.json().then(json => {
-          var diario = json[0];
-          container.innerHTML = `<div>
-    <img src='assets/${diario.foto}' alt="imagem de usuario">
-  </div>`
-        })
+      .then(res => res.json())
+      .then(json => {
+        if (json.length === 0) {
+          console.error("Nenhuma imagem encontrada para esse diário");
+          return;
+        }
+        var diario = json[0];
+        container.innerHTML = `<div>
+    <img id="ImagemU" src='/uploads/${diario.imagem}'' alt="imagem de usuario">
+  </div>`;
       })
-      .catch(err => {
-        console.log(err);
-      })
+      .catch(err => console.error(err));
   }
+
 
   function gerarPlayer() {
 

@@ -4,18 +4,24 @@
 
 /*
 comandos para mysql server
-
-CREATE DATABASE LuscoFusco;
+CREATE DATABASE LuscoFusco ;
 
 USE LuscoFusco;
 
-DROP DATABASE luscoFusco;
+DROP DATABASE LuscoFusco;
+
+CREATE TABLE usuario (
+idUser INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(59),
+email VARCHAR(59),
+senha VARCHAR(59)
+);
 
 CREATE TABLE musica (
 idMusic INT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR (59),
+nome VARCHAR(59),
 link VARCHAR(255),
-artista VARCHAR (59)
+artista VARCHAR(59)
 );
 
 CREATE TABLE diario (
@@ -23,19 +29,10 @@ idDiario INT PRIMARY KEY AUTO_INCREMENT,
 relato VARCHAR(999),
 dataD DATETIME DEFAULT CURRENT_TIMESTAMP(),
 imagem VARCHAR(255),
-fkmusica INT,
-constraint fkmusica
- foreign key (fkmusica) 
-  references musica(idMusic)
-);
-
-CREATE TABLE usuario (
-idUser INT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(59),
-email VARCHAR(59),
-senha VARCHAR(59),
-fkdiario INT,
-constraint fkdiary
- foreign key (fkdiario)
-  references diario(idDiario)
+idUser INT,
+idMusic INT,
+CONSTRAINT fk_usuario FOREIGN KEY (idUser)
+REFERENCES usuario(idUser),
+CONSTRAINT fk_musica FOREIGN KEY (idMusic)
+REFERENCES musica(idMusic)
 );

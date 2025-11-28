@@ -86,9 +86,10 @@
  .cardP,
  .cardF {
      flex: 1;
-     padding: 20px;
      display: flex;
      flex-direction: column;
+     margin: left;
+     padding: 20px;
  }
 
  .titulo {
@@ -96,6 +97,8 @@
      font-weight: 600;
      margin-bottom: 10px;
  }
+
+
 
  .subtitle {
      font-size: 14px;
@@ -140,10 +143,59 @@
      background: rgba(255, 255, 255, 0.2);
  }
 
- .buttonPhoto{
-display: flex;
-      justify-content: space-between;
-      gap: 20px;
+ .botoesFoto {
+     display: flex;
+     gap: 20px;
+     justify-content: center;
+     align-items: center;
+     margin-top: 20px;
+ }
+
+ .botoesFoto button,
+ .botoesFoto label {
+     background: rgba(255, 255, 255, 0.13);
+     color: white;
+     border: none;
+     padding: 10px 16px;
+     border-radius: 8px;
+     cursor: pointer;
+     font-weight: 600;
+     transition: background-color 0.3s ease;
+     font-family: inherit;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+ }
+
+ .botoesFoto label {
+     width: 100px;
+     height: 50px;
+     font-size: 14px;
+     justify-content: center;
+     align-items: center;
+     padding-left: 27px;
+ }
+
+ .botoesFoto button:hover,
+ .botoesFoto label:hover {
+     background: rgba(255, 255, 255, 0.2);
+ }
+
+ .botoesFoto {
+     align-self: center;
+     justify-content: center;
+ }
+
+ .buttonPhoto {
+     display: flex;
+     justify-content: space-between;
+     gap: 20px;
+ }
+
+ #btn-mostrar {
+     width: 100px;
+     height: 50px;
+
  }
 
  .textmsc input {
@@ -157,6 +209,20 @@ display: flex;
      color: #ffffff;
      font-size: 14px;
      font-family: inherit;
+ }
+
+ .BtnUp {
+     background: rgba(255, 255, 255, 0.13);
+     color: white;
+     border: none;
+     padding: 10px 16px;
+     border-radius: 8px;
+     cursor: pointer;
+
+     transition: background-color 0.3s ease;
+
+     width: 100px;
+     height: 50px;
  }
 
  #player {
@@ -182,21 +248,36 @@ display: flex;
      font-size: 18px;
      font-weight: 500;
  }
-
-
-.textSent input::placeholder,
-.textmsc input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+ #container {
+  display: flex;         
+  justify-content: center;
+  align-items: center;            
 }
-#foto{
-    background: rgba(255, 255, 255, 0.13);
+
+#ImagemU {
+  width: 300px;   
+  height: 215px; 
+  object-fit: cover; 
+  border-radius: 12px; 
+}
+
+
+
+ .textSent input::placeholder,
+ .textmsc input::placeholder {
+     color: rgba(255, 255, 255, 0.6);
+ }
+
+ #foto {
+     background: rgba(255, 255, 255, 0.13);
      color: white;
      padding: 10px 16px;
      border-radius: 8px;
      cursor: pointer;
      text-align: center;
 
-}
+ }
+
  .btn-upload {
      background: rgba(255, 255, 255, 0.13);
      color: white;
@@ -241,3 +322,14 @@ display: flex;
  #btn-enviar:hover {
      background: rgb(255, 170, 0);
  }
+
+.checado{
+    background-color: wheat;
+}
+
+ .diarioContainer{
+    width: 300px;           
+    height: 480px;          
+    overflow: auto;       
+    padding: 2px;
+}

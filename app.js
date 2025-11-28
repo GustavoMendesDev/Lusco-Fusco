@@ -15,21 +15,24 @@ var HOST_APP = process.env.APP_HOST;
 
 var app = express();
 
-
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var diarioRouter = require("./src/routes/diario");
+var dashRouter = require("./src/routes/dash");
+var userRouter = require("./src/routes/user");
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/diario", diarioRouter);
-
+app.use("/dash", dashRouter);
+app.use("/user", userRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`

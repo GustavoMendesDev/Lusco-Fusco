@@ -1,15 +1,18 @@
 var diarioModel = require("../models/diarioModel");
 
 function enviarDiario(req, res) {
+
+  console.log("BACKEND BODY =>", req.body);
+  console.log("BACKEND FILE =>", req.file);
+
   var relato = req.body.relatoServer;
   var link = req.body.LinkServer;
   var nome = req.body.NomeMusicaServer;
   var artista = req.body.ArtistaServer;
   var idUser = req.body.idUserServer;
 
-   var imagem = req.file ? req.file.filename : null;
+  var imagem = req.file ? req.file.filename : null;
 
-  // Faça as validações dos valores
   if (relato == undefined) {
     res.status(400).send("Seu relato está undefined!");
   } else if (link == undefined) {
@@ -19,15 +22,15 @@ function enviarDiario(req, res) {
   } else if (artista == undefined) {
     res.status(400).send("Sua artista a vincular está undefined!");
   } else if (idUser == undefined) {
-    res.status(400).send("Sua artista a vincular está undefined!");
+    res.status(400).send("Sua idUser a vincular está undefined!");
   } else {
-    diarioModel.enviarDiario(relato, imagem, link, nome, artista, idUser).then(function (resultado) {
-      if (resultado.length > 0) {
-        res.json(resultado);
-      } else {
-        res.status(204).send("nenhuma ação encontrada para este diario!")
-      }
+    diarioModel.enviarDiario(relato, imagem, link, nome, artista, idUser)
+    .then(function (resultado) {
+      
+      res.json({ insertId: resultado.insertId });
+
     }).catch(function (erro) {
+
       console.log(erro)
       console.log("Houve um erro ao buscar as ações do diario. ", erro.sqlMessage);
       res.status(500).json(erro.sqlMessage)
@@ -35,9 +38,8 @@ function enviarDiario(req, res) {
   }
 }
 
-function buscarUsuarioPeloDiario(req, res) {
-  console.log(req.params.id);
-  diarioModel.buscarUsuarioPeloDiario(req.params.id)
+function buscarImagemPeloDiario(req, res) {
+  diarioModel.buscarImagemPeloDiario(req.params.idDiario)
     .then(resultado => {
       res.json(resultado);
     }).catch(err => {
@@ -47,5 +49,5 @@ function buscarUsuarioPeloDiario(req, res) {
 
 module.exports = {
   enviarDiario,
-  buscarUsuarioPeloDiario
+  buscarImagemPeloDiario
 }
