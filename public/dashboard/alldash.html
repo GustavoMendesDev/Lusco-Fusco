@@ -8,6 +8,9 @@
   <link rel="icon" href="../assets/icon/sunrise.png" />
   <title>Estátiticas..</title>
 
+  <!-- scripts do Chart.js - 2022-1 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!--Navebar-->
   <nav>
     <div class="nav-container">
@@ -18,8 +21,7 @@
         <img src="../assets/icon/book-removebg-preview.png">
       </a>
 
-
-      <a href="../dashboard/alldash.html">
+      <a class="checado" href="../dashboard/alldash.html">
         <img src="../assets/icon/tocador-de-musica-removebg-preview.png">
       </a>
 
@@ -43,16 +45,18 @@
 </head>
 
 
-<body onload="Musicatotal(); Artistatotal();">
+<body onload="Musicatotal(); Artistatotal(); obterDadosGrafico(); plotarGrafico(); ">
 
   <div class="page">
     <div class="cardD">
-      <h2 >Estátiticas Lusco-Fusco</h2>
+      <h2 id="titulo1">Estátiticas dos <br> Lusco-Fusco's</h2>
       <br>
-      <p>Olá ${usuario}</p>
+      <br>
+      <div class="graph">
+        <canvas id="myChartCanvas"></canvas>
+      </div>
 
-
-        <br><br>
+      <br><br>
     </div>
     <div class="cardP">
       <div id="MusicaTotal"></div>
@@ -115,63 +119,102 @@
       });
   }
 
- function obterDadosLusco() {
+  function obterDadosGrafico() {
 
-    fetch("/lusco/contagem", { cache: 'no-store' }).then(function (response) {
+    // if (proximaAtualizacao != undefined) {
+    //   clearTimeout(proximaAtualizacao);
+    // }
 
-        if (response.ok) {
-            response.json().then(function (resposta) {
+    fetch(`/musica/buscarMusicas`, { cache: 'no-store' }).then(function (response) {
+      if (response.ok) {
+        response.json().then(function (resposta) {
+          console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+          resposta.reverse();
 
-                let dadosConvertidos = [
-                    { momento_grafico: "Com música", valor: resposta.comMusica },
-                    { momento_grafico: "Sem música", valor: resposta.semMusica }
-                ];
+          plotarGrafico(resposta);
 
-                plotarGraficoLusco(dadosConvertidos);
-            });
+        });
+      } else {
+        console.error('Nenhum dado encontrado ou erro na API');
+      }
+    })
+      .catch(function (error) {
+        console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+      });
+  }
 
-        } else {
-            console.error("Erro ao buscar dados do Lusco Fusco");
-        }
+  // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
+  // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
+  // A função *plotarGrafico* também invoca a função *atualizarGrafico*
 
-    }).catch(function (error) {
-        console.error("Erro geral:", error);
-    });
-}
-   function plotarGraficoLusco(resposta) {
-    console.log("Plotando gráfico de pizza do Lusco Fusco...");
+  function plotarGrafico(resposta) {
 
+    console.log('iniciando plotagem do gráfico...');
+
+    // Criando estrutura para plotar gráfico - labels
     let labels = [];
-    let valores = [];
 
-    for (let i = 0; i < resposta.length; i++) {
-        labels.push(resposta[i].momento_grafico);
-        valores.push(resposta[i].valor);
+    // Criando estrutura para plotar gráfico - dados
+    let dados = {
+      labels: ['Com música', 'Sem música'],
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          'rgb(245, 194, 47)',
+          'rgb(236, 122, 8)'
+        ],
+        borderWidth: 0.2,
+        borderColor: 'rgb(0, 0, 0)',
+      }]
+    };
+    console.log('----------------------------------------------')
+    console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
+    console.log(resposta)
+
+    // Inserindo valores recebidos em estrutura para plotar o gráfico
+    for (i = 0; i < resposta.length; i++) {
+      var registro = resposta[i];
+      dados.datasets[0].data.push(registro.diarios_com_musica, registro.diarios_sem_musica);
     }
 
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Uso de Música',
-            data: valores,
-            backgroundColor: [
-                'rgb(75, 192, 192)', 
-                'rgb(199, 52, 52)'
-            ],
-            hoverOffset: 4
-        }]
-    };
+    console.log('----------------------------------------------')
+    console.log('O gráfico será plotado com os respectivos valores:')
+    console.log('Labels:')
+    console.log(labels)
+    console.log('Dados:')
+    console.log(dados.datasets)
+    console.log('----------------------------------------------')
 
+    // Criando estrutura para plotar gráfico - config
     const config = {
-        type: 'pie',
-        data: data
+      type: 'pie',
+      data: dados,
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              color: 'white'
+            }
+          }
+        }
+      }
     };
 
-    new Chart(
-        document.getElementById("chartLusco"),
-        config
+    // Adicionando gráfico criado em div na tela
+    let myChart = new Chart(
+      document.getElementById(`myChartCanvas`),
+      config
     );
   }
+
+
+  // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
+  // buscando a última medida inserida em tabela contendo as capturas,
+
+  //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
+  //     Para ajustar o "select", ajuste o comando sql em src/models
 
 </script>
 

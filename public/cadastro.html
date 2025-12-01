@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
   <link rel="stylesheet" href="./css/estilo.css" />
-  <link rel="icon" href="../public/assets/icon/sunrise.png" />
+  <link rel="icon" href="../assets/icon/sunrise.png" />
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
@@ -112,68 +112,69 @@
     } if (!vtemail.includes(emailVar)) {
       console.log('Mensagem de erro ');
       mensagem_erro.innerHTML = "Coloque um email valido!";
-        return false;
+      return false;
     } if (!vtsenha.includes(senhaVar)) {
       console.log('Mensagem de erro ');
       mensagem_erro.innerHTML = "Coloque um caractere especial!";
-        return false;
+      return false;
     }
   }
 
 
-    function cadastrar() {
+  function cadastrar() {
 
-      validar()
+    validar()
 
-      //Recupere o valor da nova input pelo nome do id
-      var nomeUser = nome_input.value;
-      var emailVar = email_input.value;
-      var senhaVar = senha_input.value;
-      var confirmacaoSenhaVar = confirmacao_senha_input.value;
+    //Recupere o valor da nova input pelo nome do id
+    var nomeUser = nome_input.value;
+    var emailVar = email_input.value;
+    var senhaVar = senha_input.value;
+    var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
-      // Enviando o valor da nova input
-      fetch("/usuarios/cadastrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // crie um atributo que recebe o valor recuperado aqui
-          // Agora vá para o arquivo routes/usuario.js
-          nomeServer: nomeUser,
-          emailServer: emailVar,
-          senhaServer: senhaVar,
+    // Enviando o valor da nova input
+    fetch("/usuarios/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // crie um atributo que recebe o valor recuperado aqui
+        // Agora vá para o arquivo routes/usuario.js
+        nomeServer: nomeUser,
+        emailServer: emailVar,
+        senhaServer: senhaVar,
 
 
 
-        }),
-      })
-        .then(function (resposta) {
-          console.log("resposta: ", resposta);
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
 
-          if (resposta.ok) {
+        if (resposta.ok) {
 
-            var nomeUser = sessionStorage.NOME_USUARIO
+          var nomeUser = sessionStorage.NOME_USUARIO
 
-            mensagem_erro.innerHTML =
-              "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+          mensagem_erro.innerHTML =
+            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
 
-            setTimeout(() => {
-              window.location = "login.html";
-            }, "1500");
+          setTimeout(() => {
+            window.location = "login.html";
+          }, "1500");
 
-            limparFormulario();
-            finalizarAguardar();
-          } else {
-            throw "Houve um erro ao tentar realizar o cadastro!";
-          }
-        })
-        .catch(function (resposta) {
-          console.log(`#ERRO: ${resposta}`);
+          limparFormulario();
           finalizarAguardar();
-        });
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+        finalizarAguardar();
+      });
 
-      return false;
-    }
+    return false;
+  }
 </script>
+
 </html>

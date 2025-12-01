@@ -98,6 +98,12 @@
      margin-bottom: 10px;
  }
 
+.titulo1{
+    font-size: 44px;
+     font-weight: 600;
+     margin-bottom: 10px;
+}
+
 
 
  .subtitle {
@@ -324,7 +330,7 @@
  }
 
 .checado{
-    background-color: wheat;
+    background-color: rgba(255, 255, 255, 0.2);;
 }
 
  .diarioContainer{
