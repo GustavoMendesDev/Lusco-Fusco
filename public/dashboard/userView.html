@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/dash.css">
+  <link rel="icon" href="../assets/icon/sunrise.png" />
+  <title>Diário..</title>
+</head>
+<!--Navbar-->
+
+<body>
+  <nav>
+    <div class="nav-container">
+      <img class="logo" src="../assets/icon/sunrise.png" alt="LF" style="width: 50px; height: auto;">
+
+
+      <a class="checado" href="../dashboard/diarioLF.html">
+        <img src="../assets/icon/book-removebg-preview.png">
+      </a>
+
+
+      <a href="../dashboard/alldash.html">
+        <img src="../assets/icon/tocador-de-musica-removebg-preview.png">
+      </a>
+
+
+
+      <a href="../dashboard/userdash.html">
+        <img src="../assets/icon/usericon.png">
+      </a>
+
+
+      <a href="../index.html">
+        <img src="../assets/icon/logout-removebg-preview.png">
+      </a>
+    </div>
+  </nav>
+
+
+  <div class="page">
+
+    <div class="cardD">
+      <p class="titulo">Faça sua postagem <br> no Lusco-Fusco !</p>
+      <p id="subtitle" class="subtitle">${usuario} — registre seu Lusco - Fusco, o som dele e a cor do entardecer</p>
+
+      <div class="mood-row">
+        <span>Como você se sente agora?</span>
+
+      </div>
+
+      <div class="textSent" id="desc">
+        <textarea id='relato' rows="8" cols="40">
+</textarea>
+      </div>
+
+      <div class="buttons">
+        <button id="Limpar" onclick="limpar()">Limpar diário</button>
+      </div>
+
+      <div class="upload-block">
+
+      </div>
+    </div>
+
+    <div class="cardP">
+
+      <label class="textmsc">
+
+        <input type="text" id="link" placeholder="Cole o link do Deezer...">
+        <input type="text" id="Musica" placeholder="Qual a Música?">
+        <input type="text" id="Artista" placeholder="Qual o Artista?">
+
+        <br>
+      </label>
+
+      <button id="Play" onclick="gerarPlayer()">Tocar a musica</button>
+
+      <div id="player"></div>
+
+      <p class="tip">
+        Você pode carregar um link do <strong>Deezer</strong><br> para criar um fundo sonoro.
+      </p>
+
+      <p class="instruction">
+        Dê play, e faça um registro do <br><strong> seu Lusco-Fusco.</strong>
+      </p>
+    </div>
+
+    <div class="cardF">
+
+      <div class="ImagemU"  id="container">
+
+      </div>
+
+      <div class="botoesFoto">
+        <label class="btn-foto" for="foto">Enviar imagem</label>
+        <input style="display: none;" name="foto" id="foto" type="file"/>
+
+        <button class="btn-foto" id="btn-mostrar" onclick="MostrarFoto()">Mostrar Imagem</button>
+      </div>
+
+      <div id="foto_erro"></div>
+      <div id="mensagem_erro"></div>
+    </div>
+
+    <button id="btn-enviar" onclick="enviarDiario(relato, foto, link, Musica, Artista)">Enviar Diário</button>
+
+  </div>
+  </div>
+
+</body>
+<script>
+
+  function pegarDiario(relato, foto, link, Musica, Artista) {
+
+    var relatoDiario = relato.value;
+    var inputFoto = foto.files[0];
+    var linkMusica = link.value;
+    var nomeMusica = Musica.value;
+    var artistaMusica = Artista.value;
+    var idUser = sessionStorage.ID_USUARIO;
+    var nomeUser = sessionStorage.NOME_USUARIO;
+    console.log(relatoDiario, linkMusica, nomeMusica, artistaMusica);
+
+    if (
+      relatoDiario == "" ||
+      linkMusica == "" ||
+      nomeMusica == "" ||
+      artistaMusica == ""
+    ) { mensagem_erro.innerHTML = "()"; }
+
+    var formData = new FormData();
+    formData.append("relatoServer", relatoDiario);
+    formData.append("LinkServer", linkMusica);
+    formData.append("NomeMusicaServer", nomeMusica);
+    formData.append("ArtistaServer", artistaMusica);
+    formData.append("idUserServer", idUser);
+
+
+    fetch("/diario/pegarDiario", {
+      method: "GET",
+      body: formData,
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+        return resposta.json();
+      })
+
+      .then(function (dados) {
+        console.log("DADOS RECEBIDOS DO BACK:", dados);
+
+        if (dados.insertId) {
+          sessionStorage.ID_DIARIO = dados.insertId;
+          console.log("ID salvo:", sessionStorage.ID_DIARIO);
+        }
+      })
+
+      .catch(function (erro) {
+        console.error("Erro ao enviar:", erro);
+        mensagem_erro.innerHTML =
+          "<strong><p style='color:red'>Erro ao pegar o diário.</p></strong>";
+      });
+  }
+
+  function MostrarFoto() {
+
+    var idDiario = sessionStorage.ID_DIARIO
+
+    console.log("ID_DIARIO no MostrarFoto:", idDiario);
+
+    if (!idDiario) {
+      console.error(" ID_DIARIO está vazio! Diário não foi salvo.");
+      return;
+    }
+
+    fetch(`/diario/buscarImagemPeloDiario/${idDiario}`, {
+      method: "GET"
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.length === 0) {
+          console.error("Nenhuma imagem encontrada para esse diário");
+          return;
+        }
+        var diario = json[0];
+        container.innerHTML = `<div>
+    <img id="ImagemU" src='/uploads/${diario.imagem}'' alt="imagem de usuario">
+  </div>`;
+      })
+      .catch(err => console.error(err));
+  }
+
+
+  function gerarPlayer() {
+
+    // declarando url e player 
+
+    var url = document.getElementById("link").value;
+    var player = document.getElementById("player");
+    player.innerHTML = "";
+
+    // valida se a url é do deezer
+
+    if (!url.includes("deezer.com")) {
+      player.innerHTML = "<p style='color:red'>Link inválido</p>";
+      return;
+    }
+
+    // tirando / removendo a interrogacao "?" da url 
+
+    var interegacao = url.indexOf("?");
+    if (interegacao > -1) {
+      var limpa = "";
+      for (var i = 0; i < interegacao; i++) {
+        limpa += url[i];
+      }
+      url = limpa;
+    }
+
+    // procurando id 
+
+    //var id 
+    var idMusica = "";
+
+    // for - while
+    for (var i = 0; i < url.length; i++) {
+
+      // Detectar a parte do "/track/"
+      if (
+        url[i] == "/" &&
+        url[i + 1] == "t" &&
+        url[i + 2] == "r" &&
+        url[i + 3] == "a" &&
+        url[i + 4] == "c" &&
+        url[i + 5] == "k" &&
+        url[i + 6] == "/"
+      ) {
+
+        i += 7; // pular "/track/"
+
+        // pegamos apenas números que vai na url final do widget (ID)
+
+        while (i < url.length && url[i] >= "0" && url[i] <= "9") {
+          idMusica += url[i];
+          i++;
+        }
+
+        break;
+
+        // se acabou, break 
+      }
+    }
+
+    if (idMusica == "") {
+      player.innerHTML = "<strong><p style='color:red'>ID inválido</p></strong>";
+      return;
+    }
+
+    // rodamos o player de msc
+    var playerMusica =
+      '<iframe scrolling="no" frameborder="0" ' +
+      ' "encrypted-media; picture-in-picture" ' +
+      'src="https://widget.deezer.com/widget/dark/track/' + idMusica + '" ' +
+      'width="310" height="150"></iframe>';
+
+    player.innerHTML = playerMusica;
+  }
+
+</script>
+
+</html>
