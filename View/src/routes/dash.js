@@ -10,4 +10,9 @@ rota.get('/Artistatotal/', (req, res) => {
   dashController.Artistatotal(req, res);
 });
 
+rota.get('/MusicaNumero/', (req, res) => {
+  dashController.MusicaNumero(req, res);
+});
+
+
 module.exports = rota;

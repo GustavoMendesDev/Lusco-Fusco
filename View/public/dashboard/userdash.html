@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/dash.css">
   <link rel="icon" href="../assets/icon/sunrise.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
   <title>Usuário..</title>
 </head>
 <!--Navbar-->
@@ -41,20 +46,20 @@
 <body onload="MusicaTop(); ArtistaTop(); UserDiario();">
   <div class="page">
 
-    <div class="cardD">
-      <div id="titulo"></div>
+    <div class="cardDiario">
+      <h1><strong>
+          <p></p>DIÁRIOS 
+        </strong></h1>
       <p id="subtitle" class="subtitle"></p>
       <div class="diarioContainer" id="diariosContainer"></div>
-
     </div>
-    <div class="cardP">
+
+    <div class="cardLista">
+        <div id="nome" class="nome"></div>
+        <br>
+      <div id="musicaContainer"></div>
       <div id="artistaContainer"></div>
       <div id="TopA"></div>
-
-    </div>
-
-    <div class="cardF">
-      <div id="musicaContainer"></div>
       <div id="TopM"></div>
 
     </div>
@@ -79,7 +84,7 @@
           return;
         }
 
-        artistaContainer.innerHTML = `<h3>Artistas favoritos <br> De ${nomeUser}</h3><br>`;
+        artistaContainer.innerHTML = `<h3>Top 5 Artistas </h3><br>`;
 
         for (var i = 0; i < artistas.length; i++) {
           var a = artistas[i];
@@ -111,8 +116,7 @@
           musicaContainer.innerHTML = "<p>Nenhuma música encontrada.</p>";
           return;
         }
-
-        musicaContainer.innerHTML = `<h3> Músicas favoritas <br> De ${nomeUser}</h3><br>`;
+        musicaContainer.innerHTML = `<h3> Top 5 Músicas </h3><br>`;
 
         for (var i = 0; i < musicas.length; i++) {
           var m = musicas[i];
@@ -132,6 +136,10 @@
     var nomeUser = sessionStorage.NOME_USUARIO
     var idUser = sessionStorage.ID_USUARIO;
 
+      nome.innerHTML = `<h1><strong>
+       TOP 5 ♫ <br> ${nomeUser}
+        </strong></h1>`
+
     if (!idUser) {
       console.error("ID do usuário não definido!");
       return;
@@ -144,17 +152,36 @@
           diariosContainer.innerHTML = "<p>Nenhum diário encontrado.</p>";
           return;
         }
-
         diariosContainer.innerHTML = "";
         subtitle.innerHTML = `Olá ${nomeUser} — Acompanhe seus Lusco-Fuscos`;
-        var vezes = 0
+
+        var vezes = 0;
+
         for (var i = 0; i < diarios.length; i++) {
-          vezes++
-          var diario = diarios[i];
-          diariosContainer.innerHTML +=
-            `<button onclick="DiarioView()"> <p>Número Diário : ` + vezes +
-            ` | Data: ` + diario.dataD + `</p></button> <br><br>`;
+          vezes++;
+
+          var d = diarios[i];
+
+          diariosContainer.innerHTML += `
+         <button onclick="DiarioView()" class="card">
+      <p style="font-family: 'Poppins', sans-serif; font-size: 20px;">Diário #${vezes}</p>
+
+      <p style="font-family: 'Elms Sans', sans-serif; font-optical-sizing: auto; font-weight: 200; font-style: italic; font-size: 17px;">
+      <strong style="font-family: 'Poppins', sans-serif; font-size: 20px;">Data:</strong> ${d.dataD}
+      </p>
+
+      <p style="font-family: 'Elms Sans', sans-serif; font-optical-sizing: auto; font-weight: 200; font-style: italic; font-size: 17px;">
+      <strong style="font-family: 'Poppins', sans-serif; font-size: 20px;">Relato:</strong> ${d.relato}
+      </p>
+
+      <p style="font-family: 'Elms Sans', sans-serif; font-optical-sizing: auto; font-weight: 200; font-style: italic; font-size: 17px;">
+      <strong style="font-family: 'Poppins', sans-serif; font-size: 20px;">Música:</strong> ${d.musica}
+      </p>
+         </button>
+         <br><br>
+        `;
         }
+
       })
       .catch(err => {
         console.error("Erro ao buscar diários:", err);

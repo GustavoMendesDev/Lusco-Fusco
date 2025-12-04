@@ -42,8 +42,8 @@
   <div class="page">
 
     <div class="cardD">
-      <p class="titulo">Faça sua postagem <br> no Lusco-Fusco !</p>
-      <p class="subtitle">${usuario} — registre seu Lusco - Fusco, o som dele e a cor do entardecer</p>
+      <p class="tituloLusco">Faça sua postagem <br> no Lusco-Fusco!! ☀️</p>
+      <p id="subtitle" class="subtitle"> registre seu Lusco - Fusco, o som dele e a cor do entardecer</p>
 
       <div class="mood-row">
         <span>Como você se sente agora?</span>
@@ -95,14 +95,17 @@
       </div>
 
       <div class="botoesFoto">
+
         <label class="btn-foto" for="foto">Enviar imagem</label>
         <input style="display: none;" name="foto" id="foto" type="file"/>
 
         <button class="btn-foto" id="btn-mostrar" onclick="MostrarFoto()">Mostrar Imagem</button>
       </div>
+      <br><br>
 
-      <div id="foto_erro"></div>
-      <div id="mensagem_erro"></div>
+      <div class="Fotoerro" id="foto_erro"></div>
+      <div class="Msgerro"  id="mensagem_erro"></div>
+
     </div>
 
     <button id="btn-enviar" onclick="enviarDiario(relato, foto, link, Musica, Artista)">Enviar Diário</button>
@@ -162,13 +165,13 @@
         }
 
         mensagem_erro.innerHTML =
-          "<strong><p style='color:green'>Diário enviado!</p></strong>";
+          "<strong><p style='color:green; font-size: 25px;'>Diário enviado!</p></strong>";
       })
 
       .catch(function (erro) {
         console.error("Erro ao enviar:", erro);
         mensagem_erro.innerHTML =
-          "<strong><p style='color:red'>Erro ao enviar o diário.</p></strong>";
+          "<strong><p style='color:red; font-size: 25px;'>Erro ao enviar o diário.</p></strong>";
       });
   }
 

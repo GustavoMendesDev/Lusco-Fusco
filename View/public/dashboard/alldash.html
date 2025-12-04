@@ -45,12 +45,13 @@
 </head>
 
 
-<body onload="Musicatotal(); Artistatotal(); obterDadosGrafico(); plotarGrafico(); ">
+<body onload="Musicatotal(); Artistatotal(); obterDadosGrafico(); plotarGrafico(); MusicaNumero();">
 
   <div class="page">
     <div class="cardD">
-      <h2 id="titulo1">Estátiticas dos <br> Lusco-Fusco's</h2>
+      <h1 id="titulo1"><strong>ESTATÍSTICAS DIÁRIOS</strong> </h1>
       <br>
+      <h2 id="titulo1">Proporção de Diários que Utilizam Música ou Não</h2>
       <br>
       <div class="graph">
         <canvas id="myChartCanvas"></canvas>
@@ -58,16 +59,31 @@
 
       <br><br>
     </div>
+
     <div class="cardP">
+      <br>
+      <br>
       <div id="MusicaTotal"></div>
+      <br>
+      <div id="MusicaUm"></div>
     </div>
 
     <div class="cardF">
+      <br>
+      <br>
       <div id="ArtistaTotal"></div>
     </div>
 
 </body>
 <script>
+
+   window.addEventListener("DOMContentLoaded", function() {
+    Musicatotal();
+    Artistatotal();
+    obterDadosGrafico();
+    MusicaNumero();
+
+    });
 
   function Musicatotal() {
 
@@ -78,7 +94,6 @@
           MusicaTotal.innerHTML = "<p>Nenhuma música encontrada.</p>";
           return;
         }
-
         MusicaTotal.innerHTML = "<h2>Música mais tocadas <br> De todo Lusco-Fusco</h2><br>";
 
         for (var i = 0; i < musicas.length; i++) {
@@ -91,6 +106,35 @@
       .catch(err => {
         console.error("Erro ao buscar músicas:", err);
         MusicaTotal.innerHTML = "<p>Erro ao carregar músicas.</p>";
+      });
+  }
+
+  function MusicaNumero() {
+
+    document.getElementById("MusicaUm").innerHTML
+
+    fetch(`/dash/MusicaNumero/`)
+
+      .then(res => res.json())
+      .then(musicas => {
+        if (!musicas || musicas.length == 0) {
+          MusicaUm.innerHTML = "<p>Nenhuma música encontrada.</p>";
+          return;
+        }
+
+        MusicaUm.innerHTML = "<h2>Música mais tocada <br> De todo Lusco-Fusco</h2><br>";
+
+        for (var i = 0; i < musicas.length; i++) {
+          var m = musicas[i];
+          MusicaUm.innerHTML +=
+            "<p>Música mais Tocada: " + m.musica +
+            " — " + m.qtd_vezes + "x (" + m.porcentagem + "%)</p>";
+
+        }
+      })
+      .catch(err => {
+        console.error("Erro ao buscar músicas:", err);
+        MusicaUm.innerHTML = "<p>Erro ao carregar músicas.</p>";
       });
   }
 
@@ -207,8 +251,8 @@
       document.getElementById(`myChartCanvas`),
       config
     );
-  }
 
+  }
 
   // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
   // buscando a última medida inserida em tabela contendo as capturas,

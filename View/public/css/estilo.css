@@ -15,14 +15,11 @@
 
 
 body {
-  background-color: #ffa01c;
-  background-size: 2000px;
+   background: linear-gradient(180deg, #ff9f47, #f8d37b, #fef7e0);
+  font-family: "Poppins", sans-serif;
+  color: #2c1a00;
   margin: 0;
   padding: 0;
-  font-family: "Elms Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 200;
-  font-style: italic;
 }
 
 .container {
@@ -112,9 +109,11 @@ a span {
 a:hover span {
   transform: translate3d(-200%, 0, 0);
 }
-.navbar a{
- align-items: left;
+
+.navbar a {
+  align-items: left;
 }
+
 .navbar {
   width: 32%;
   display: flex;
@@ -127,9 +126,10 @@ a:hover span {
   font-weight: 200;
   font-style: italic;
 }
-.logo-container{
-    justify-content: space-between;
-    gap: 20px;
+
+.logo-container {
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .titulo {
@@ -138,7 +138,7 @@ a:hover span {
   font-optical-sizing: auto;
   font-weight: 200;
   font-style: italic;
-  font-size: 25px;
+  font-size: 30px;
 }
 
 .navbar a {
@@ -357,7 +357,7 @@ a:hover span {
   width: 100%;
 }
 
-.buttonPhoto{
+.buttonPhoto {
   cursor: pointer;
   font-family: "Elms Sans", sans-serif;
   font-optical-sizing: auto;
@@ -472,7 +472,8 @@ input {
   float: left;
   width: 70px;
 }
-  .titulo h4,
+
+.titulo h4,
 .titulo h1 {
   margin: 0;
   text-align: center;
@@ -528,4 +529,41 @@ input {
 .footer a {
   color: white;
   cursor: pointer;
+}
+
+.titulo1,
+.titulo2 {
+  text-align: center;
+  color: #5a262c;
+  font-family: "Elms Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: italic;
+  font-size: 35px;
+}
+
+.main_funcionamento {
+ text-align: center;
+  color: #5a262c;
+  font-family: "Elms Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: italic;
+  font-size: 35px;
+}
+.convite{
+  text-align: center;
+  font-optical-sizing: auto;
+  font-size: 45px;
+}
+
+.footer-lusco {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  color: #ffffff;
+  background-color: #000000;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  border-radius: 12px 12px 0 0;
 }

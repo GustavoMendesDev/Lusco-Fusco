@@ -21,9 +21,20 @@ function Artistatotal (req , res){
         }
     })
 }
+function MusicaNumero (req , res){
+    dashModel.MusicaNumero()
+    .then(function(resultado){
+        if(resultado.length > 0){
+            res.status(200).json(resultado);
+        }else{
+            res.status(204).send("Nenhuma musica encontrada!")
+        }
+    })
+}
 
 
 module.exports = {
     Musicatotal,
-   Artistatotal
+   Artistatotal,
+   MusicaNumero
 }
