@@ -92,88 +92,88 @@
 
   function cadastrar() {
 
-    var vtemail = ["@"]
-    var vtsenha = ["@", "#", "$", "%"]
+    var vtsenha = ["@", "#", "$", "%"];
     var nomeUser = nome_input.value;
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
+    mensagem_erro.innerHTML = "";
 
-    if (
-      nomeUser == "" ||
-      emailVar == "" ||
-      senhaVar == "" ||
-      confirmacaoSenhaVar == ""
-    ) {
-      mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
-    }
     if (emailVar == "" || senhaVar == "") {
       console.log('Mensagem de erro para todos os campos em branco');
-      mensagem_erro.innerHTML = "Preencha todos os campos!";
-      return false;
-    } if (!vtemail.includes(emailVar)) {
-      console.log('Mensagem de erro ');
-      mensagem_erro.innerHTML = "Coloque um email valido!";
-      return false;
-    } if (!vtsenha.includes(senhaVar)) {
-      console.log('Mensagem de erro ');
-      mensagem_erro.innerHTML = "Coloque um caractere especial!";
+      mensagem_erro.innerHTML += "Preencha todos os campos!";
       return false;
     }
-  
 
-  //Recupere o valor da nova input pelo nome do id
-  var nomeUser = nome_input.value;
-  var emailVar = email_input.value;
-  var senhaVar = senha_input.value;
-  var confirmacaoSenhaVar = confirmacao_senha_input.value;
-
-  // Enviando o valor da nova input
-  fetch("/usuarios/cadastrar", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      // crie um atributo que recebe o valor recuperado aqui
-      // Agora vá para o arquivo routes/usuario.js
-      nomeServer: nomeUser,
-      emailServer: emailVar,
-      senhaServer: senhaVar,
-
-
-
-    }),
-  })
-    .then(function (resposta) {
-      console.log("resposta: ", resposta);
-
-      if (resposta.ok) {
-
-        var nomeUser = sessionStorage.NOME_USUARIO
-
-        mensagem_erro.innerHTML =
-          "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
-
-        setTimeout(() => {
-          window.location = "login.html";
-        }, "1500");
-
-        limparFormulario();
-        finalizarAguardar();
-      } else {
-        throw "Houve um erro ao tentar realizar o cadastro!";
+    if (!emailVar.includes("@") || emailVar.length < 5) {
+      console.log('Mensagem de erro ');
+      mensagem_erro.innerHTML += "Coloque um email válido!";
+      return false;
+    }
+    let contemEspecial = false;
+    for (let char of vtsenha) {
+      if (senhaVar.includes(char)) {
+        contemEspecial = true;
+        break;
       }
-    })
-    .catch(function (resposta) {
-      console.log(`#ERRO: ${resposta}`);
-      finalizarAguardar();
-    });
+    }
 
-  return false;
-  }
+    if (!contemEspecial) {
+      console.log('Mensagem de erro ');
+      mensagem_erro.innerHTML += "A senha deve conter pelo menos um caractere especial (@, #, $, ou %)!";
+      return false;
+    }
+
+
+      var nomeUser = nome_input.value;
+      var emailVar = email_input.value;
+      var senhaVar = senha_input.value;
+      var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+      // Enviando o valor da nova input
+      fetch("/usuarios/cadastrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          
+          // crie um atributo que recebe o valor recuperado aqui
+          // Agora vá para o arquivo routes/usuario.js
+          nomeServer: nomeUser,
+          emailServer: emailVar,
+          senhaServer: senhaVar,
+
+
+
+        }),
+      })
+        .then(function (resposta) {
+          console.log("resposta: ", resposta);
+
+          if (resposta.ok) {
+
+            var nomeUser = sessionStorage.NOME_USUARIO
+
+            mensagem_erro.innerHTML =
+              "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+            setTimeout(() => {
+              window.location = "login.html";
+            }, "1500");
+
+            limparFormulario();
+            finalizarAguardar();
+          } else {
+            throw "Houve um erro ao tentar realizar o cadastro!";
+          }
+        })
+        .catch(function (resposta) {
+          console.log(`#ERRO: ${resposta}`);
+          finalizarAguardar();
+        });
+    }
 </script>
 
 </html>

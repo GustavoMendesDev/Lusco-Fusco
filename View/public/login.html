@@ -77,31 +77,8 @@
     </div>
 
     <script>
-        function validar() {
-            var vtemail = ["@"]
-            var vtsenha = ["@", "#", "$", "%"]
-
-            var emailVar = input_email.value;
-            var senhaVar = input_senha.value;
-
-
-            if (emailVar == "" || senhaVar == "") {
-                console.log('Mensagem de erro para todos os campos em branco');
-                mensagem_erro.innerHTML += "Preencha todos os campos!";
-                return false;
-            } if (!vtemail.includes(emailVar)) {
-                console.log('Mensagem de erro ');
-                mensagem_erro.innerHTML += "Coloque um email valido!";
-
-            } if (!vtsenha.includes(senhaVar)) {
-                console.log('Mensagem de erro ');
-                mensagem_erro.innerHTML += "Coloque um caractere especial!";
-            }
-        }
-
         function entrar() {
-
-            validar()
+            
             var emailVar = input_email.value;
             var senhaVar = input_senha.value;
 
@@ -147,8 +124,6 @@
                 console.log(erro);
                 mensagem_erro.innerHTML = "Erro na conexão com o servidor";
             })
-
-            return false;
         }
     </script>
 </body>
